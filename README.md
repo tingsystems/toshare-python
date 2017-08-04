@@ -10,7 +10,7 @@ GEt Template
 ```python
 import toshare
 
-toshare._credentials = ('username', 'password')
+toshare._credentials = ('client_id', 'client_secret')
 
 ```
 
