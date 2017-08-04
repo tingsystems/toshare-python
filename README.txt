@@ -1,3 +1,3 @@
-Facturama python wrapper
+ToShare python wrapper
 
-For more info: https://github.com/tingsystems/toshare
+For more info: https://github.com/tingsystems/toshare-pyhton
