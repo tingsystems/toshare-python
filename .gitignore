@@ -2,8 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+<<<<<<< HEAD
 .idea
 .DS_Store
+=======
+>>>>>>> ac03b3c85a3da96ce9b99ff04197f718abf39483
 
 # C extensions
 *.so
