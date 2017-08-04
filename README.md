@@ -2,7 +2,7 @@
 
 Install
 ```sh
-pip install -e git://github.com/tingsystems/toshare.git@master#egg=toshare
+pip install -e git://github.com/tingsystems/toshare-python.git@master#egg=toshare
 ```
 GEt Template
 
