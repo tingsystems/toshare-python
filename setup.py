@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-version = "0.0.1"
+version = "1.0.0"
 author = "Tingsystems"
 
 setup(
@@ -12,10 +12,10 @@ setup(
     version=version,
     author=author,
     author_email='soporte@tingsystems.com',
-    url='https://github.com/tingsystems/toshare',
+    url='https://github.com/tingsystems/toshare-python',
     description='Easy ToShare python wrapper',
     long_description=open('./README.txt', 'r').read(),
-    download_url='https://github.com/tingsystems/toshare/master',
+    download_url='https://github.com/tingsystems/toshare-python/master',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
