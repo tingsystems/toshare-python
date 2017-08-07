@@ -27,11 +27,12 @@ toshare._credentials = ('client_id', 'client_secret')
 message = toshare.Messages.create({
   'template': template.id,
   'subject': 'Hello',
-  'data': {'firsName': 'Tony'},
+  'data': {'firstName': 'Tony'},
   'to': email_to,
   'fromName': 'Company Inc.',
   'fromEmail': 'hello@company.com'
  })
+ 
 if message.id:
     print('Notification send {} ok'.format(email_to))
 
