@@ -123,7 +123,7 @@ class ToShare:
         :param data: dict with data for create object
         :return: object with data from response
         """
-        return cls.to_object(cls.build_http_request('post', cls.__name__, data))
+        return cls.to_object(cls.build_http_request('post', cls.__name__.lower(), data))
 
     @classmethod
     def retrieve(cls, oid, params=None):
@@ -132,7 +132,7 @@ class ToShare:
         :params oid: id of object retrieve
         :return: object with data from response
         """
-        return cls.to_object(cls.build_http_request('get', '{}/{}'.format(cls.__name__, oid), params=params))
+        return cls.to_object(cls.build_http_request('get', '{}/{}'.format(cls.__name__.lower(), oid), params=params))
 
     @classmethod
     def all(cls, params=None):
@@ -140,7 +140,7 @@ class ToShare:
         :type params: extra params for build request
         :return: list of objects from response toshare api
         """
-        return cls.build_http_request('get', cls.__name__, params=params)
+        return cls.build_http_request('get', cls.__name__.lower(), params=params)
 
     @classmethod
     def query(cls, params=None):
@@ -148,7 +148,7 @@ class ToShare:
         :type params: extra params for build request
         :return: list of objects from response toshare api
         """
-        return cls.build_http_request('get', cls.__name__, params=params)
+        return cls.build_http_request('get', cls.__name__.lower(), params=params)
 
     @classmethod
     def update(cls, data, oid):
@@ -157,7 +157,7 @@ class ToShare:
         :type data: data
         :return: object with data from response
         """
-        return cls.to_object(cls.build_http_request('put', '{}/{}'.format(cls.__name__, oid), data))
+        return cls.to_object(cls.build_http_request('put', '{}/{}'.format(cls.__name__.lower(), oid), data))
 
     @classmethod
     def delete(cls, oid):
@@ -165,7 +165,7 @@ class ToShare:
         :param oid: id object
         :return: None
         """
-        return cls.build_http_request('delete', '{}/{}'.format(cls.__name__, oid))
+        return cls.build_http_request('delete', '{}/{}'.format(cls.__name__.lower(), oid))
 
 
 class Templates(ToShare):
