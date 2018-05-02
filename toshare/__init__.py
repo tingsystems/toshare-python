@@ -102,13 +102,13 @@ class ToShare:
         elif body.status_code == 402:
             raise ProcessingError(body.json())
         elif body.status_code == 404:
-            raise ResourceNotFoundError(body.json())
+            raise ResourceNotFoundError({'error': body.text})
         elif body.status_code == 422:
             raise ParameterValidationError(body.json())
         elif body.status_code == 500:
-            raise ApiError(body.json())
+            raise ApiError({'error': body.text})
         else:
-            raise ToShareError(body.json())
+            raise ToShareError({'error': body.text})
 
     @classmethod
     def to_object(cls, response):
