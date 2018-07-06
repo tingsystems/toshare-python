@@ -2,15 +2,14 @@
 # coding: utf-8
 # (c) 2017 Raul Granados <@pollitux>
 
-import sys
-from requests import request
+import urllib3
 
 try:
     import json
 except ImportError:
     import simplejson as json
 
-__version__ = '0.0.1'
+__version__ = '1.0.3'
 __author__ = 'Raul Granados'
 
 _credentials = ('', '',)
@@ -68,11 +67,11 @@ class ToShare:
         payload = {
             'client_id': _client_id, 'client_secret': _client_secret, 'grant_type': 'client_credentials'
         }
-
-        r = request('post', '{}{}'.format(_api_base, 'auth/token'), data=json.dumps(payload))
-        if r.status_code != 200:
+        http = urllib3.PoolManager()
+        r = http.request('POST', '{}{}'.format(_api_base, 'auth/token'), body=json.dumps(payload))
+        if r.status != 200:
             raise ToShareError('Authentication error')
-        auth = r.json()
+        auth = json.loads(r.data.decode('utf-8'))
         cls._headers = {
             'Authorization': 'Bearer {}'.format(auth['access_token']),
             'content-type': 'application/json',
@@ -84,28 +83,29 @@ class ToShare:
     def build_http_request(cls, method, path, payload=None, params=None):
         cls.auth_api()
         method = str(method).lower()
-        body = request(
-            method, '{}{}'.format(_api_base, path), json=payload, params=params, headers=cls._headers
+        http = urllib3.PoolManager()
+        body = http.request(
+            method, '{}{}'.format(_api_base, path), fields=payload, params=params, headers=cls._headers
         )
 
-        if body.status_code == 200 or body.status_code == 201 or body.status_code == 204:
+        if body.status == 200 or body.status == 201 or body.status == 204:
             response_body = {'status': True}
             try:
-                response_body = body.json()
+                response_body = json.loads(body.data.decode('utf-8'))
             except Exception:
                 pass
             return response_body
-        if body.status_code == 400:
+        if body.status == 400:
             raise MalformedRequestError(body.json())
-        elif body.status_code == 401:
+        elif body.status == 401:
             raise AuthenticationError(body.json())
-        elif body.status_code == 402:
+        elif body.status == 402:
             raise ProcessingError(body.json())
-        elif body.status_code == 404:
+        elif body.status == 404:
             raise ResourceNotFoundError({'error': body.text})
-        elif body.status_code == 422:
+        elif body.status == 422:
             raise ParameterValidationError(body.json())
-        elif body.status_code == 500:
+        elif body.status == 500:
             raise ApiError({'error': body.text})
         else:
             raise ToShareError({'error': body.text})
