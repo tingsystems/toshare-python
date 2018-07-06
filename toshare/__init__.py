@@ -9,7 +9,7 @@ try:
 except ImportError:
     import simplejson as json
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 __author__ = 'Raul Granados'
 
 _credentials = ('', '',)
@@ -88,27 +88,29 @@ class ToShare:
             method, '{}{}'.format(_api_base, path), body=json.dumps(payload), fields=params, headers=cls._headers
         )
 
+        response = json.loads(body.data.decode('utf-8'))
+
         if body.status == 200 or body.status == 201 or body.status == 204:
             response_body = {'status': True}
             try:
-                response_body = json.loads(body.data.decode('utf-8'))
+                response_body = response
             except Exception:
                 pass
             return response_body
         if body.status == 400:
-            raise MalformedRequestError(body.json())
+            raise MalformedRequestError(response)
         elif body.status == 401:
-            raise AuthenticationError(body.json())
+            raise AuthenticationError(response)
         elif body.status == 402:
-            raise ProcessingError(body.json())
+            raise ProcessingError(response)
         elif body.status == 404:
-            raise ResourceNotFoundError({'error': body.text})
+            raise ResourceNotFoundError({'error': response})
         elif body.status == 422:
-            raise ParameterValidationError(body.json())
+            raise ParameterValidationError(response)
         elif body.status == 500:
-            raise ApiError({'error': body.text})
+            raise ApiError({'error': response})
         else:
-            raise ToShareError({'error': body.text})
+            raise ToShareError({'error': response})
 
     @classmethod
     def to_object(cls, response):
