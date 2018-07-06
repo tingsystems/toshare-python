@@ -85,7 +85,7 @@ class ToShare:
         method = str(method).lower()
         http = urllib3.PoolManager()
         body = http.request(
-            method, '{}{}'.format(_api_base, path), fields=payload, params=params, headers=cls._headers
+            method, '{}{}'.format(_api_base, path), body=json.dumps(payload), fields=params, headers=cls._headers
         )
 
         if body.status == 200 or body.status == 201 or body.status == 204:
