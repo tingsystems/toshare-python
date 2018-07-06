@@ -80,13 +80,16 @@ class ToShare:
         }
 
     @classmethod
-    def build_http_request(cls, method, path, payload=None, params=None):
+    def build_http_request(cls, method, path, payload=None):
         cls.auth_api()
         method = str(method).lower()
         http = urllib3.PoolManager()
-        body = http.request(
-            method, '{}{}'.format(_api_base, path), body=json.dumps(payload), fields=params, headers=cls._headers
-        )
+
+        if method in ('post', 'put'):
+            payload = json.dumps(payload).encode('utf-8')
+            body = http.request(method, '{}{}'.format(_api_base, path), body=payload, headers=cls._headers)
+        else:
+            body = http.request(method, '{}{}'.format(_api_base, path), fields=payload, headers=cls._headers)
 
         response = json.loads(body.data.decode('utf-8'))
 
@@ -134,7 +137,7 @@ class ToShare:
         :params oid: id of object retrieve
         :return: object with data from response
         """
-        return cls.to_object(cls.build_http_request('get', '{}/{}'.format(cls.__name__.lower(), oid), params=params))
+        return cls.to_object(cls.build_http_request('get', '{}/{}'.format(cls.__name__.lower(), oid), payload=params))
 
     @classmethod
     def all(cls, params=None):
@@ -142,7 +145,7 @@ class ToShare:
         :type params: extra params for build request
         :return: list of objects from response toshare api
         """
-        return cls.build_http_request('get', cls.__name__.lower(), params=params)
+        return cls.build_http_request('get', cls.__name__.lower(), payload=params)
 
     @classmethod
     def query(cls, params=None):
@@ -150,7 +153,7 @@ class ToShare:
         :type params: extra params for build request
         :return: list of objects from response toshare api
         """
-        return cls.build_http_request('get', cls.__name__.lower(), params=params)
+        return cls.build_http_request('get', cls.__name__.lower(), payload=params)
 
     @classmethod
     def update(cls, data, oid):
@@ -159,7 +162,7 @@ class ToShare:
         :type data: data
         :return: object with data from response
         """
-        return cls.to_object(cls.build_http_request('put', '{}/{}'.format(cls.__name__.lower(), oid), data))
+        return cls.to_object(cls.build_http_request('put', '{}/{}'.format(cls.__name__.lower(), oid), payload=data))
 
     @classmethod
     def delete(cls, oid):
@@ -181,9 +184,9 @@ class Templates(ToShare):
         :params slug: slug of template
         :return: object with data from response
         """
-        t = cls.build_http_request('GET', '{}'.format(cls.__name__.lower()), params={'slug': slug})
+        t = cls.build_http_request('GET', '{}'.format(cls.__name__.lower()), payload={'slug': slug})
         if len(t) != 1:
-            raise ToShareError('Template not found')
+            raise ToShareError('Template not fount')
         return cls.to_object(t[0])
 
 
@@ -202,4 +205,4 @@ class Messages(ToShare):
         for f in fields_required:
             if f not in data:
                 raise ToShareError('{} is required'.format(f))
-        return cls.to_object(cls.build_http_request('post', cls.__name__.lower(), data))
+        return cls.to_object(cls.build_http_request('post', cls.__name__.lower(), payload=data))
