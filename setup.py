@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-version = "1.0.5"
+version = "1.0.6"
 author = "Tingsystems"
 
 setup(
