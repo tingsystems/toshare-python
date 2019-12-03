@@ -9,7 +9,7 @@ try:
 except ImportError:
     import simplejson as json
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'
 __author__ = 'Raul Granados'
 
 _credentials = ('', '',)
