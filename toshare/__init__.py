@@ -14,7 +14,7 @@ __author__ = 'Raul Granados'
 
 _credentials = ('', '',)
 _apiV = 'v1'
-_api_base = 'https://api.tosharehq.xyz/api/{}/'.format(_apiV)
+_api_base = 'http://api.tosharehq.xyz/api/{}/'.format(_apiV)
 
 
 class ToShareError(Exception):
